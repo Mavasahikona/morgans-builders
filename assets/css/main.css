@@ -328,6 +328,8 @@ h3.blk:first-of-type{margin-top:0}
   .contact span{min-width:0;padding-top:0}
   .map{min-height:420px}
   .map-cap{font-size:10px;padding:7px 10px;max-width:70%}
+  .row .btn{font-size:13px;padding:12px 10px;letter-spacing:.4px;white-space:nowrap}
+  .row .qty button{width:32px}
   .strip{font-size:11px;padding:8px 32px}
 }
 @media(max-width:620px){
