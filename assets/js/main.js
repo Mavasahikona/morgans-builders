@@ -226,7 +226,8 @@
     const p = byId(id) || P[0];
     document.title = p.name + " · Morgan's Builders";
     const opts = p.finishes || [];
-    let chosen = opts[0], qty = 1, tab = "specs";
+    let chosen = opts.find(o => p.name.includes(o) || (p.unit || "").includes(o)) || opts[0];
+    let qty = 1, tab = "specs";
     const revs = (window.PRODUCT_REVIEWS[p.id] || [
       { n: "Verified buyer", s: 5, t: "Does the job", b: "Bought this at the counter and it has held up. Staff knew what they were talking about.", d: "recently", v: true }
     ]);
@@ -257,8 +258,8 @@
           <div><span>Trade account</span><span>30-day terms on approved accounts</span></div>
         </div>
       </div>
-      <div style="grid-column:1/-1;background:#fff;padding:64px 0 0;border-top:1px solid #131317">
-        <div class="wrap" style="padding:0 48px 24px">
+      <div class="pdp-tabs">
+        <div class="wrap">
           <div class="tabs"><button class="tab on" data-t="specs">Specifications</button><button class="tab" data-t="reviews">Reviews (${revs.length})</button><button class="tab" data-t="delivery">Delivery & returns</button></div>
           <div id="tabBody"></div>
         </div>
