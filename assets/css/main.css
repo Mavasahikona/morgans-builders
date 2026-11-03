@@ -297,6 +297,14 @@ h3.blk:first-of-type{margin-top:0}
   .strip{font-size:11px;padding:8px 32px}
 }
 @media(max-width:620px){
+  .hdr{grid-template-columns:auto 1fr;grid-template-areas:"menu brand" "utils utils";align-items:center;row-gap:10px}
+  .menu-toggle{grid-area:menu}
+  .brand{grid-area:brand;text-align:left;justify-self:start}
+  .brand .word{font-size:18px;letter-spacing:1.1px}
+  .brand .sub{display:none}
+  .utils{grid-area:utils;justify-content:space-between;margin-top:4px}
+  .search{flex:1;min-width:0}
+  .search input{width:100%}
   .grid,.cats{grid-template-columns:1fr 1fr}
   .card .meta{padding:14px 14px 18px}
   .card h3{font-size:14px}
