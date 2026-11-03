@@ -62,7 +62,7 @@ const ESSENTIALS = [
 const HOME_REVIEWS = [
   {n:"Thabo M.", w:"Contractor · Protea Glen", s:5, q:"I phone Morgan at 6:40 in the morning and the cement is on my bakkie by 7:15. That is the whole reason I stopped driving to the big-box stores.", d:"2 weeks ago"},
   {n:"Lindiwe K.", w:"Homeowner · Lenasia", s:5, q:"They matched my wall paint from a chip I chipped off myself and mixed it in ten minutes. Cheaper than the warehouse and I did not wait in a queue.", d:"1 month ago"},
-  {n:"Riaan v.d. Merwe", w:"Builder · Ennerdale", s:4, q:"Stock is real — if the app says 3 grinders left, there are 3 grinders. Only gripe is parking on a Saturday morning.", d:"1 month ago"},
+  {n:"Riaan v.d. Merwe", w:"Builder · Lenasia South", s:4, q:"Stock is real — if the app says 3 grinders left, there are 3 grinders. Only gripe is parking on a Saturday morning.", d:"1 month ago"},
   {n:"Nomsa D.", w:"Homeowner · Soweto", s:5, q:"Bought a geyser and they booked the installer for the same week. No deposit games, no runaround. Paid on delivery.", d:"2 months ago"},
   {n:"Ashwin P.", w:"Plumber · Eldorado Park", s:5, q:"Their pipe and fitting range covers 90% of what I need on a callout. The other 10% they order and it lands the next morning.", d:"2 months ago"},
   {n:"Johan S.", w:"Site foreman · Johannesburg South", s:4, q:"Bulk pricing on cement and IBR sheeting is competitive. Quote came back same day on WhatsApp.", d:"3 months ago"}

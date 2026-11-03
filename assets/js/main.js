@@ -90,7 +90,7 @@
           <div class="fbrand">
             <div class="word">Morgan's Builders</div>
             <p>Building materials, hardware and the essentials — supplied to Johannesburg South since 1998. Stock, trade pricing and delivery, without the queue.</p>
-            <p style="margin-top:18px">14 Kelsey Street, Ennerdale Ext 1<br>Johannesburg South, 1830<br><a href="tel:+27118541200" style="display:inline;color:#131317;text-decoration:underline">+27 11 854 1200</a></p>
+            <p style="margin-top:18px">Mackenzie Place, Lenasia South<br>Johannesburg, 1827<br><a href="tel:+27118541200" style="display:inline;color:#131317;text-decoration:underline">+27 11 854 1200</a></p>
           </div>
           <div><h5>Shop</h5><a href="shop.html?cat=Building">Building & cement</a><a href="shop.html?cat=Paint">Paint & finishes</a><a href="shop.html?cat=Power%20tools">Power tools</a><a href="shop.html?cat=Plumbing">Plumbing</a><a href="shop.html?cat=Security">Security</a></div>
           <div><h5>Trade</h5><a href="#">Trade account</a><a href="#">Bulk quotes</a><a href="#">Delivery & fleet</a><a href="#">Credit application</a><a href="#">Site delivery zones</a></div>
@@ -251,7 +251,7 @@
         </div>
         <a class="btn btn-block" href="checkout.html" style="margin-top:0" onclick="window.MBCart.add('${p.id}',1)">Buy it now</a>
         <div class="svc">
-          <div><span>Collection</span><span>Ready in 30 min · 14 Kelsey St, Ennerdale</span></div>
+          <div><span>Collection</span><span>Ready in 30 min · Mackenzie Pl, Lenasia South</span></div>
           <div><span>Delivery</span><span>R95 within 25km · free over R750</span></div>
           <div><span>Returns</span><span>30 days, unused and sealed</span></div>
           <div><span>Trade account</span><span>30-day terms on approved accounts</span></div>
@@ -283,7 +283,7 @@
           <a class="btn" style="margin-top:24px" href="#" onclick="event.preventDefault();window.MBtoast('Reviews are demo data')">Write a review</a>`,
         delivery: `<div class="svc" style="margin-top:0;border-top:0;padding-top:0;max-width:640px">
             <div><span>Collect in store</span><span>Free · ready in 30 minutes during trading hours</span></div>
-            <div><span>Local delivery</span><span>R95 within 25km of Ennerdale · free over R750</span></div>
+            <div><span>Local delivery</span><span>R95 within 25km of Lenasia South · free over R750</span></div>
             <div><span>Delivery window</span><span>Same day if ordered before 14:00, else next working day</span></div>
             <div><span>Returns</span><span>30 days on unused, sealed stock with proof of purchase</span></div>
             <div><span>Payment</span><span>PayFast · Yoco · Ozow · SnapScan · EFT · cash on collection</span></div>
@@ -342,7 +342,7 @@
 
         <h3 class="blk">How would you like it?</h3>
         <div class="pick on" data-del="delivery"><span class="rad"></span><div><b>Deliver to me</b><span>R95 within 25km · free over R750 · same day before 14:00</span></div><span class="pf">${shipping() ? money(shipping()) : "Free"}</span></div>
-        <div class="pick" data-del="collection"><span class="rad"></span><div><b>Collect in store</b><span>14 Kelsey St, Ennerdale Ext 1 · ready in 30 min</span></div><span class="pf">Free</span></div>
+        <div class="pick" data-del="collection"><span class="rad"></span><div><b>Collect in store</b><span>Mackenzie Pl, Lenasia South Ext 1 · ready in 30 min</span></div><span class="pf">Free</span></div>
 
         <div id="addrBlock">
           <h3 class="blk">Delivery address</h3>
@@ -398,7 +398,7 @@
         $("#procMsg").style.display = "none";
         $("#procDone").querySelector("h3").textContent = (g.id === "cash" || g.id === "eft") ? "Order confirmed" : "Payment approved";
         $("#procDone").insertAdjacentHTML("afterbegin", `<p style="font-size:13px;color:#40464b;margin:0 0 18px">${money(amt)} · ${del === "collection" ? "collect in 30 min" : "delivery booked"}</p>`);
-        $("#procOrder").innerHTML = `Reference <b>${order}</b><br>Paid with ${g.n} · ${del === "collection" ? "Collection at Ennerdale" : "Delivery to " + (fn || "you") + " in Johannesburg South"}<br><span style="font-size:12px;color:#40464b">A confirmation SMS would go to ${$("#ph").value || "your mobile"}.</span>`;
+        $("#procOrder").innerHTML = `Reference <b>${order}</b><br>Paid with ${g.n} · ${del === "collection" ? "Collection at Lenasia South" : "Delivery to " + (fn || "you") + " in Johannesburg South"}<br><span style="font-size:12px;color:#40464b">A confirmation SMS would go to ${$("#ph").value || "your mobile"}.</span>`;
         $("#procDone").style.display = "block";
         clearCart();
       }, 1900);
