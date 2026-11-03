@@ -307,7 +307,7 @@
 
   /* ---------- page: checkout ---------- */
   function checkout() {
-    read(); paint();
+    CART = read(); paint();
     if (!CART.length) {
       $("#coRoot").innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:120px 24px">
         <h1 style="font-size:44px">Your cart is empty</h1>
@@ -394,8 +394,10 @@
       const order = "MB-" + new Date().getFullYear() + "-" + String(Math.floor(1000 + Math.random() * 8999));
       setTimeout(() => {
         $("#procSpin").style.display = "none";
-        $("#procTitle").textContent = g.id === "cash" || g.id === "eft" ? "Order confirmed" : "Payment approved";
-        $("#procMsg").textContent = money(amt) + " · " + (del === "collection" ? "collect in 30 min" : "delivery booked");
+        $("#procTitle").style.display = "none";
+        $("#procMsg").style.display = "none";
+        $("#procDone").querySelector("h3").textContent = (g.id === "cash" || g.id === "eft") ? "Order confirmed" : "Payment approved";
+        $("#procDone").insertAdjacentHTML("afterbegin", `<p style="font-size:13px;color:#40464b;margin:0 0 18px">${money(amt)} · ${del === "collection" ? "collect in 30 min" : "delivery booked"}</p>`);
         $("#procOrder").innerHTML = `Reference <b>${order}</b><br>Paid with ${g.n} · ${del === "collection" ? "Collection at Ennerdale" : "Delivery to " + (fn || "you") + " in Johannesburg South"}<br><span style="font-size:12px;color:#40464b">A confirmation SMS would go to ${$("#ph").value || "your mobile"}.</span>`;
         $("#procDone").style.display = "block";
         clearCart(); repaint();
