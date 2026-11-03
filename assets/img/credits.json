@@ -121,12 +121,12 @@
   "q": "hardware shop shelves power tools interior"
  },
  "paint-promo": {
-  "file": "paint-promo.jpg",
+  "file": "paint-promo-v2.jpg",
   "src": "painter with roller on ladder (candidate c2)",
   "q": "painter roller painting wall room"
  },
  "cement-promo": {
-  "file": "cement-promo.jpg",
+  "file": "cement-promo-v2.jpg",
   "src": "stacked cement bags warehouse with forklift (candidate c1)",
   "q": "cement bags stacked on site"
  }

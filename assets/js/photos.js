@@ -20,7 +20,7 @@ const PHOTOS = {
   "padlock-50": "assets/img/padlock-50.jpg",
   "hero": "assets/img/store.webp",
   "store": "assets/img/store.webp",
-  "paint-promo": "assets/img/paint-promo.jpg",
-  "cement-promo": "assets/img/cement-promo.jpg"
+  "paint-promo": "assets/img/paint-promo-v2.jpg",
+  "cement-promo": "assets/img/cement-promo-v2.jpg"
 };
 window.PHOTOS = PHOTOS;
