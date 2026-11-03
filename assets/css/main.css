@@ -168,6 +168,30 @@ footer{background:var(--white);border-top:1px solid var(--black);padding:64px 0 
 .ess img{width:40px;height:40px;object-fit:contain}
 .store-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.2)}
 
+/* promo panes — readable over photography */
+.split .pane::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(19,19,23,.15) 0%,rgba(19,19,23,.55) 42%,rgba(19,19,23,.94) 100%)}
+.split .pane .photo{filter:grayscale(.35) contrast(1.04) brightness(.92);opacity:1}
+.split .pane .in{z-index:3}
+.split .pane h3{color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.6)}
+.split .pane p{color:#eef1f3}
+
+/* store + real map */
+.store .box{background:var(--mist);padding:48px}
+.hours{margin:28px 0 32px;border-top:1px solid #dcd8d4}
+.hours div{display:flex;align-items:baseline;gap:16px;padding:14px 0;border-bottom:1px solid #dcd8d4;font-size:15px}
+.hours span{color:var(--charcoal);min-width:150px;font-size:12px;letter-spacing:1.2px;text-transform:uppercase}
+.hours b{font-family:var(--head);font-weight:900;font-size:20px;letter-spacing:.4px;color:var(--black)}
+.hours em{margin-left:auto;font-style:normal;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--charcoal)}
+.contact div{display:flex;gap:16px;padding:10px 0;font-size:15px;border-bottom:1px solid #e6e3e1}
+.contact span{color:var(--charcoal);min-width:150px;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;padding-top:2px}
+.contact b{font-weight:500;line-height:1.4}
+.contact a{text-decoration:underline}
+.map{position:relative;min-height:520px;background:#e9e6e3;overflow:hidden}
+.map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(.45) contrast(1.03)}
+.map-cap{position:absolute;top:16px;left:16px;z-index:2;background:#fff;color:var(--black);padding:9px 14px;font-size:11px;letter-spacing:1.1px;text-transform:uppercase;border:1px solid var(--black)}
+.map-open{position:absolute;bottom:16px;left:16px;z-index:2;background:var(--black);color:#fff;padding:12px 20px;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;border-radius:var(--r-btn)}
+.map-open:hover{background:#2a2a30}
+
 /* drawer */
 .scrim{position:fixed;inset:0;background:rgba(19,19,23,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:80}
 .scrim.on{opacity:1;pointer-events:auto}

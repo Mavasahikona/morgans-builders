@@ -122,14 +122,12 @@
  },
  "paint-promo": {
   "file": "paint-promo.jpg",
-  "src": "https://down-my.img.susercontent.com/file/sg-11134202-7rfh9-m3ythy3w6hq9e3",
-  "bytes": 96939,
-  "q": "paint tin brushes roller on wall"
+  "src": "painter with roller on ladder (candidate c2)",
+  "q": "painter roller painting wall room"
  },
  "cement-promo": {
   "file": "cement-promo.jpg",
-  "src": "https://img.freepik.com/premium-photo/stacked-bags-cement-construction-site-daylight_406939-40137.jpg?w=2000",
-  "bytes": 576574,
-  "q": "cement bags stacked builder site"
+  "src": "stacked cement bags warehouse with forklift (candidate c1)",
+  "q": "cement bags stacked on site"
  }
 }
