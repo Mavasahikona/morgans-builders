@@ -318,6 +318,14 @@ h3.blk:first-of-type{margin-top:0}
   .hero-in{padding:48px 24px 40px}
   .split .pane{min-height:360px}
   .two,.three,.gw{grid-template-columns:1fr}
+  .hours div{display:grid;grid-template-columns:1fr auto;gap:2px 12px}
+  .hours span{min-width:0}
+  .hours b{font-size:18px;white-space:nowrap}
+  .hours em{grid-column:1/-1;margin:4px 0 0}
+  .contact div{display:grid;grid-template-columns:1fr;gap:2px;padding:12px 0}
+  .contact span{min-width:0;padding-top:0}
+  .map{min-height:420px}
+  .map-cap{font-size:10px;padding:7px 10px;max-width:70%}
   .strip{font-size:11px;padding:8px 32px}
 }
 @media(max-width:620px){
