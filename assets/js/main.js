@@ -6,6 +6,12 @@
   const byId = id => P.find(p => p.id === id);
   const KEY = "mb_cart_v1";
 
+  /* ---------- variants ---------- */
+  const VS = p => (p && ((window.VARIANTS || {})[p.id] || (p.finishes || []).map(n => ({ n, price: p.price, stock: p.stock })))) || [];
+  const vAt = (p, i) => { const a = VS(p); return a[i] || a[0] || { n: "", price: p.price, stock: p.stock }; };
+  const vOf = l => { const p = byId(l.id); return vAt(p, l.v || 0); };
+  const lp = l => vOf(l).price * l.qty;
+
   /* ---------- imagery ---------- */
   const photo = id => (window.PHOTOS || {})[id];
   const artFor = (p, opt) => photo(p.id)
@@ -17,25 +23,29 @@
   function write(c) { localStorage.setItem(KEY, JSON.stringify(c)); paint(); }
   let CART = read();
   const count = () => CART.reduce((n, l) => n + l.qty, 0);
-  const subtotal = () => CART.reduce((n, l) => n + byId(l.id).price * l.qty, 0);
+  const subtotal = () => CART.reduce((n, l) => n + lp(l), 0);
   const shipping = () => (subtotal() === 0 || subtotal() >= 750 ? 0 : 95);
   const vat = () => (subtotal() + shipping()) * 0.15;
   const total = () => subtotal() + shipping() + vat();
 
-  function add(id, qty) {
-    const line = CART.find(l => l.id === id);
-    if (line) line.qty += qty || 1; else CART.push({ id, qty: qty || 1 });
+  function add(id, qty, v) {
+    v = v || 0;
+    const line = CART.find(l => l.id === id && (l.v || 0) === v);
+    if (line) line.qty += qty || 1; else CART.push({ id, qty: qty || 1, v });
     write(CART);
-    const p = byId(id);
-    toast(p.name + " added to cart");
+    const p = byId(id), vv = vAt(p, v);
+    toast(p.name + (vv.n ? " · " + vv.n : "") + " added to cart");
     openDrawer();
   }
-  function setQty(id, q) {
-    const line = CART.find(l => l.id === id);
-    if (!line) return;
+  function setQtyAt(i, q) {
+    const line = CART[i]; if (!line) return;
     line.qty = Math.max(0, q);
-    if (line.qty === 0) CART = CART.filter(l => l.id !== id);
+    if (line.qty === 0) CART = CART.filter((_, k) => k !== i);
     write(CART);
+  }
+  function setQty(id, q) {
+    const i = CART.findIndex(l => l.id === id);
+    if (i >= 0) setQtyAt(i, q);
   }
   function clearCart() { CART = []; write(CART); }
 
@@ -141,16 +151,16 @@
     const dc = $("#drawerCount"); if (dc) dc.textContent = count() ? "· " + count() + (count() === 1 ? " item" : " items") : "";
     const box = $("#cartItems");
     if (box) {
-      box.innerHTML = CART.length ? CART.map(l => {
-        const p = byId(l.id);
+      box.innerHTML = CART.length ? CART.map((l, i) => {
+        const p = byId(l.id), v = vOf(l);
         return `<div class="ditem"><div class="art">${artFor(p)}</div>
           <div style="flex:1">
             <b>${p.name}</b>
-            <div class="sm">${p.brand} · ${money(p.price)}</div>
-            <div class="qty"><button onclick="window.MBCart.setQty('${p.id}',${l.qty - 1})">−</button><span>${l.qty}</span><button onclick="window.MBCart.setQty('${p.id}',${l.qty + 1})">+</button></div>
-            <div><button class="rm" onclick="window.MBCart.setQty('${p.id}',0)">Remove</button></div>
+            <div class="sm">${v.n ? v.n + " · " : ""}${money(v.price)}</div>
+            <div class="qty"><button onclick="window.MBCart.setQtyAt(${i},${l.qty - 1})">−</button><span>${l.qty}</span><button onclick="window.MBCart.setQtyAt(${i},${l.qty + 1})">+</button></div>
+            <div><button class="rm" onclick="window.MBCart.setQtyAt(${i},0)">Remove</button></div>
           </div>
-          <div style="font-family:Dosis,Arial;font-weight:900;font-size:16px;white-space:nowrap">${money(p.price * l.qty)}</div>
+          <div style="font-family:Dosis,Arial;font-weight:900;font-size:16px;white-space:nowrap">${money(lp(l))}</div>
         </div>`;
       }).join("") : `<div class="empty">Your cart is empty.<br><br><a class="btn" href="shop.html">Start shopping</a></div>`;
     }
@@ -222,35 +232,39 @@
 
   /* ---------- page: product ---------- */
   function product() {
-    const id = new URLSearchParams(location.search).get("id") || P[0].id;
-    const p = byId(id) || P[0];
+    const qs = new URLSearchParams(location.search);
+    const p = byId(qs.get("id")) || P[0];
     document.title = p.name + " · Morgan's Builders";
-    const opts = p.finishes || [];
-    let chosen = opts.find(o => p.name.includes(o) || (p.unit || "").includes(o)) || opts[0];
+    const vars = VS(p);
+    const urlV = parseInt(qs.get("v"), 10);
+    let chosen = (urlV >= 0 && urlV < vars.length) ? urlV
+      : Math.max(0, vars.findIndex(v => p.name.includes(v.n) || (p.unit || "").includes(v.n)));
     let qty = 1, tab = "specs";
     const revs = (window.PRODUCT_REVIEWS[p.id] || [
       { n: "Verified buyer", s: 5, t: "Does the job", b: "Bought this at the counter and it has held up. Staff knew what they were talking about.", d: "recently", v: true }
     ]);
+    const v0 = vAt(p, chosen);
 
     $("#pdp").innerHTML = `
-      <div class="gallery">${artFor(p)}</div>
+      <div class="gallery" id="gallery">${artFor(p)}</div>
       <div class="detail">
         <div class="crumb"><a href="index.html">Home</a><span>/</span><a href="shop.html?cat=${encodeURIComponent(p.cat)}">${p.cat}</a><span>/</span><span>${p.brand}</span></div>
         <span class="brandline" style="font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#40464b">${p.brand}</span>
         <h1>${p.name}</h1>
         <div class="stars" style="font-size:14px">${starStr(p.rating)}<span>${p.rating} · ${p.reviews} reviews</span></div>
-        <div class="pr">${money(p.price)}${p.was ? ` <span style="font-family:Arial;font-size:16px;font-weight:400;color:#949494;text-decoration:line-through">${money(p.was)}</span>` : ""}<small>${p.unit} · incl. 15% VAT · ${p.tag || "Trade pricing available"}</small></div>
+        <div class="pr" id="pdpPrice">${money(v0.price)}<small>${p.unit} · incl. 15% VAT · ${p.tag || "Trade pricing available"}</small></div>
         <p class="desc">${p.desc}</p>
-        <div class="stock"><span class="dot"></span>${p.stock}</div>
+        <div class="stock"><span class="dot"></span><span id="stockTxt">${v0.stock}</span></div>
         <div class="opt">
-          <div class="lab">Size / finish — <b id="optLabel">${chosen}</b></div>
-          <div class="chips" id="chips">${opts.map(o => `<button class="chip ${o === chosen ? "on" : ""}" data-o="${o}">${o}</button>`).join("")}</div>
+          <div class="lab">Size / finish — <b id="optLabel">${v0.n}</b><span class="cdot" id="optDot" style="display:none"></span></div>
+          <div class="chips" id="chips">${vars.map((v, i) => `<button class="chip ${i === chosen ? "on" : ""}" data-i="${i}">${v.hex ? `<i class="cdot" style="background:${v.hex}"></i>` : ""}${v.n}</button>`).join("")}</div>
+          <div class="selnote" id="selNote">${money(v0.price)} · ${v0.stock}</div>
         </div>
         <div class="row">
           <div class="qty"><button id="minus">−</button><span id="qty">1</span><button id="plus">+</button></div>
-          <button class="btn btn-dark" id="addBtn">Add to cart — ${money(p.price)}</button>
+          <button class="btn btn-dark" id="addBtn">Add to cart — ${money(v0.price)}</button>
         </div>
-        <a class="btn btn-block" href="checkout.html" style="margin-top:0" onclick="window.MBCart.add('${p.id}',1)">Buy it now</a>
+        <button class="btn btn-block" id="buyNow" style="margin-top:0">Buy it now</button>
         <div class="svc">
           <div><span>Collection</span><span>Ready in 30 min · Mackenzie Pl, Lenasia South</span></div>
           <div><span>Delivery</span><span>R95 within 25km · free over R750</span></div>
@@ -272,7 +286,8 @@
             <div><span>Brand</span><span>${p.brand}</span></div>
             <div><span>Category</span><span>${p.cat}</span></div>
             <div><span>Pack / size</span><span>${p.unit}</span></div>
-            <div><span>Options in stock</span><span>${opts.join(" · ")}</span></div>
+            <div><span>Selected option</span><span id="specSel">${vAt(p, chosen).n} · ${money(vAt(p, chosen).price)}</span></div>
+            <div><span>Options in stock</span><span>${vars.map(v => v.n).join(" · ")}</span></div>
             <div><span>Barcode</span><span>MB-${p.id.toUpperCase()}-${(p.name.length * 37).toString().slice(0, 6)}</span></div>
             <div><span>Warranty</span><span>Manufacturer warranty · claim in store</span></div>
           </div>`,
@@ -280,7 +295,7 @@
             <div><div class="big" style="font-family:Dosis,Arial;font-size:60px;font-weight:900;line-height:.8">${stars.toFixed(1)}</div><div class="stars" style="margin-top:8px">${starStr(stars)}<span>${revs.length} verified reviews</span></div></div>
             <div style="font-size:13px;color:#40464b;max-width:40ch">Every review below is from a customer who bought this item at the counter or on this store.</div>
           </div>
-          <div class="rv">${revs.map(r => `<div class="item"><div class="hd"><div><b>${r.t}</b>${r.v ? '<span class="vd">✓ verified purchase</span>' : ""}</div><span style="color:#40464b">${r.d}</span></div><div class="stars">${starStr(r.s)}</div><p style="margin-top:8px">${r.b}</p><div style="font-size:12px;color:#40464b;margin-top:10px">${r.n}</div></div>`).join("")}</div>
+          <div class="rv">${revs.map(r => `<div class="item"><div class="hd"><div><b>${r.t}</b>${r.v ? '<span class="vd">&#10003; verified purchase</span>' : ""}</div><span style="color:#40464b">${r.d}</span></div><div class="stars">${starStr(r.s)}</div><p style="margin-top:8px">${r.b}</p><div style="font-size:12px;color:#40464b;margin-top:10px">${r.n}</div></div>`).join("")}</div>
           <a class="btn" style="margin-top:24px" href="#" onclick="event.preventDefault();window.MBtoast('Reviews are demo data')">Write a review</a>`,
         delivery: `<div class="svc" style="margin-top:0;border-top:0;padding-top:0;max-width:640px">
             <div><span>Collect in store</span><span>Free · ready in 30 minutes during trading hours</span></div>
@@ -295,15 +310,35 @@
     }
     paintTab();
     $$(".tab").forEach(t => t.onclick = () => { tab = t.dataset.t; paintTab(); });
+
+    /* one function drives every place the choice shows up */
+    function applyVariant(pop) {
+      const v = vAt(p, chosen);
+      $$("#chips .chip").forEach((x, i) => x.classList.toggle("on", i === chosen));
+      $("#optLabel").textContent = v.n;
+      const dot = $("#optDot");
+      if (v.hex) { dot.style.display = "inline-block"; dot.style.background = v.hex; }
+      else { dot.style.display = "none"; }
+      $("#gallery").style.backgroundColor = v.hex || "#f8f8f8";
+      $("#pdpPrice").innerHTML = money(v.price) + (p.was ? ` <span style="font-family:Arial;font-size:16px;font-weight:400;color:#949494;text-decoration:line-through">${money(p.was)}</span>` : "") + `<small>${p.unit} · incl. 15% VAT · ${p.tag || "Trade pricing available"}</small>`;
+      if (pop) { $("#pdpPrice").classList.remove("price-pop"); void $("#pdpPrice").offsetWidth; $("#pdpPrice").classList.add("price-pop"); }
+      $("#stockTxt").textContent = v.stock;
+      $("#selNote").textContent = money(v.price) + " · " + v.stock;
+      $("#addBtn").textContent = "Add to cart — " + money(v.price * qty);
+      const ss = $("#specSel"); if (ss) ss.textContent = v.n + " · " + money(v.price);
+      history.replaceState(null, "", "product.html?id=" + p.id + (chosen ? "&v=" + chosen : ""));
+    }
+    applyVariant(false);
+
     $$("#chips .chip").forEach(c => c.onclick = () => {
-      chosen = c.dataset.o;
-      $$("#chips .chip").forEach(x => x.classList.toggle("on", x === c));
-      $("#optLabel").textContent = chosen;
+      chosen = parseInt(c.dataset.i, 10) || 0;
+      applyVariant(true);
     });
-    const setQ = n => { qty = Math.max(1, n); $("#qty").textContent = qty; $("#addBtn").textContent = "Add to cart — " + money(p.price * qty); };
+    const setQ = n => { qty = Math.max(1, n); $("#qty").textContent = qty; applyVariant(false); };
     $("#plus").onclick = () => setQ(qty + 1);
     $("#minus").onclick = () => setQ(qty - 1);
-    $("#addBtn").onclick = () => window.MBCart.add(p.id, qty);
+    $("#addBtn").onclick = () => window.MBCart.add(p.id, qty, chosen);
+    $("#buyNow").onclick = () => { window.MBCart.add(p.id, qty, chosen); location.href = "checkout.html"; };
   }
 
   /* ---------- page: checkout ---------- */
@@ -319,7 +354,7 @@
     let gw = "payfast", del = "delivery";
     const sumHTML = () => `
       <h3>Order summary</h3>
-      ${CART.map(l => { const p = byId(l.id); return `<div class="li"><div class="art">${artFor(p)}</div><div><b>${p.name}</b><div class="q">Qty ${l.qty} · ${p.brand}</div></div><div class="p">${money(p.price * l.qty)}</div></div>`; }).join("")}
+      ${CART.map(l => { const p = byId(l.id), v = vOf(l); return `<div class="li"><div class="art">${artFor(p)}</div><div><b>${p.name}</b><div class="q">Qty ${l.qty} · ${v.n || p.brand}${v.n ? " · " + money(v.price) : ""}</div></div><div class="p">${money(lp(l))}</div></div>`; }).join("")}
       <div style="margin-top:18px">
         <div class="sumrow"><span>Subtotal</span><span>${money(subtotal())}</span></div>
         <div class="sumrow"><span>${del === "collection" ? "Collection" : "Delivery"}</span><span>${del === "collection" ? "Free" : shipping() ? money(shipping()) : "Free"}</span></div>
@@ -343,7 +378,7 @@
 
         <h3 class="blk">How would you like it?</h3>
         <div class="pick on" data-del="delivery"><span class="rad"></span><div><b>Deliver to me</b><span>R95 within 25km · free over R750 · same day before 14:00</span></div><span class="pf">${shipping() ? money(shipping()) : "Free"}</span></div>
-        <div class="pick" data-del="collection"><span class="rad"></span><div><b>Collect in store</b><span>Mackenzie Pl, Lenasia South Ext 1 · ready in 30 min</span></div><span class="pf">Free</span></div>
+        <div class="pick" data-del="collection"><span class="rad"></span><div><b>Collect in store</b><span>Mackenzie Pl, Lenasia South · ready in 30 min</span></div><span class="pf">Free</span></div>
 
         <div id="addrBlock">
           <h3 class="blk">Delivery address</h3>

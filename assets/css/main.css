@@ -192,6 +192,16 @@ footer{background:var(--white);border-top:1px solid var(--black);padding:64px 0 
 .map-open{position:absolute;bottom:16px;left:16px;z-index:2;background:var(--black);color:#fff;padding:12px 20px;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;border-radius:var(--r-btn)}
 .map-open:hover{background:#2a2a30}
 
+
+/* variant feedback */
+.pdp .gallery{transition:background-color .3s ease}
+.cdot{display:inline-block;width:13px;height:13px;border-radius:50%;border:1px solid rgba(19,19,23,.35);margin-left:8px;vertical-align:-1px}
+.chip .cdot{width:9px;height:9px;margin:0 6px 0 0;vertical-align:0;border-color:rgba(255,255,255,.5)}
+.chip.on .cdot{border-color:rgba(255,255,255,.7)}
+.selnote{font-size:12px;letter-spacing:.4px;color:var(--charcoal);margin-top:12px}
+.price-pop{animation:ppop .32s ease}
+@keyframes ppop{0%{transform:translateY(3px);opacity:.45}100%{transform:none;opacity:1}}
+
 /* drawer */
 .scrim{position:fixed;inset:0;background:rgba(19,19,23,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:80}
 .scrim.on{opacity:1;pointer-events:auto}

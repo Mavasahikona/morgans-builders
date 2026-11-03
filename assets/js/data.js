@@ -97,3 +97,26 @@ const money = n => "R" + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 window.ART = ART; window.PRODUCTS = PRODUCTS; window.CATEGORIES = CATEGORIES;
 window.ESSENTIALS = ESSENTIALS; window.HOME_REVIEWS = HOME_REVIEWS;
 window.PRODUCT_REVIEWS = PRODUCT_REVIEWS; window.GATEWAYS = GATEWAYS; window.money = money;
+
+/* variant matrix — every option carries its own price, stock and colour */
+const VARIANTS = {
+  "ppc-50":[{"n":"50kg","price":109.99,"stock":"240+ bags"},{"n":"25kg","price":64.99,"stock":"180 bags"},{"n":"Bulk · 1 tonne","price":2099,"stock":"12 loads"}],
+  "plascon-20":[{"n":"Brilliant White","price":2899,"stock":"18 tins","hex":"#fbfaf7"},{"n":"Wall Street","price":2899,"stock":"9 tins","hex":"#8d979d"},{"n":"Stoep Grey","price":3019,"stock":"6 tins","hex":"#6d7175"}],
+  "bosch-550":[{"n":"550W","price":1199,"stock":"9 units"},{"n":"650W kit","price":1799,"stock":"4 kits"}],
+  "makita-ga":[{"n":"115mm","price":1450,"stock":"3 units"},{"n":"230mm","price":2899,"stock":"2 units"}],
+  "ladder-32":[{"n":"3.2m","price":2199,"stock":"6 units"},{"n":"4.8m","price":3199,"stock":"3 units"},{"n":"6.4m","price":4399,"stock":"2 units"}],
+  "barrow":[{"n":"65L steel","price":799,"stock":"22 units"},{"n":"90L steel","price":999,"stock":"8 units"}],
+  "kwikot-150":[{"n":"100L","price":4199,"stock":"2 units"},{"n":"150L","price":4850,"stock":"4 units"},{"n":"200L","price":5899,"stock":"2 units"}],
+  "wavin-110":[{"n":"50mm","price":89,"stock":"200 lengths"},{"n":"110mm","price":189,"stock":"120 lengths"},{"n":"160mm","price":349,"stock":"45 lengths"}],
+  "cobra-mix":[{"n":"Chrome","price":749,"stock":"14 units","hex":"#cdd1d6"},{"n":"Brushed nickel","price":829,"stock":"6 units","hex":"#a9aeb4"},{"n":"Matte black","price":899,"stock":"4 units","hex":"#2c2c30"}],
+  "centurion-d5":[{"n":"Sliding gate kit","price":7499,"stock":"5 kits"},{"n":"Double swing kit","price":9299,"stock":"2 kits"}],
+  "cadac-9":[{"n":"3kg","price":549,"stock":"12 bottles"},{"n":"9kg","price":899,"stock":"30+ bottles"},{"n":"19kg","price":1499,"stock":"6 bottles"}],
+  "ibr-058":[{"n":"IBR · charcoal","price":219,"stock":"cut to length","hex":"#3a4045"},{"n":"Corrugated · zinc","price":199,"stock":"cut to length","hex":"#9aa0a5"},{"n":"Chromadek · red","price":239,"stock":"cut to length","hex":"#b03a34"}],
+  "stanley-ham":[{"n":"16oz","price":399,"stock":"18 units"},{"n":"20oz","price":459,"stock":"26 units"}],
+  "paraffin-20":[{"n":"5L","price":129,"stock":"daily refill"},{"n":"20L","price":399,"stock":"daily refill"},{"n":"200L drum","price":2999,"stock":"3 drums"}],
+  "sika-25":[{"n":"Standard","price":169,"stock":"80 bags"},{"n":"Flexible","price":239,"stock":"45 bags"}],
+  "ellies-4":[{"n":"12-way","price":229,"stock":"40 units"},{"n":"8-way","price":179,"stock":"25 units"}],
+  "cbi-20":[{"n":"10A","price":129,"stock":"30 units"},{"n":"20A","price":139,"stock":"60 units"},{"n":"32A","price":159,"stock":"22 units"}],
+  "padlock-50":[{"n":"40mm","price":99,"stock":"20 units"},{"n":"50mm","price":129,"stock":"55 units"},{"n":"70mm","price":189,"stock":"14 units"}]
+};
+window.VARIANTS = VARIANTS;
